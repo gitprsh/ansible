@@ -1,0 +1,29 @@
+---
+- name: Update web servers
+  hosts: g1
+  become: yes
+
+  tasks:
+  - name: system update
+    apt:
+      update_cache: yes
+
+  - name: nginx install
+    apt:
+      name: nginx
+      state: present
+
+  - name: git install
+    apt:
+      name: git
+      state: present
+
+  - name:  cleaning
+    file:
+      path: /var/www/html/index.nginx-debian.html
+      state: absent
+
+  - name: deploying
+    git:
+      repo: https://github.com/ravi2krishna/ecomm.git
+      dest: /var/www/html/

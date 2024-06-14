@@ -1,0 +1,14 @@
+---
+- name: cleaning everything
+  hosts: g1 g2
+  become: yes
+
+  tasks:
+  - name: cleaning the ecomm
+    file:
+      path: /var/www/html
+      state: absent
+  - name: creating web directory
+    file:
+      path: /var/www/html
+      state: directory

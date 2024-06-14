@@ -1,0 +1,63 @@
+---
+- name: Update web servers
+  hosts: g1 g2
+  become: yes
+
+  tasks:
+  - name: system update
+    apt:
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: nginx install
+    apt:
+      name: nginx
+      state: present
+    when: ansible_distribution == "Ubuntu"
+
+  - name: git install
+    apt:
+      name: git
+      state: present
+    when: ansible_distribution == "Ubuntu"
+
+  - name:  cleaning
+    file:
+      path: /var/www/html/index.nginx-debian.html
+      state: absent
+    when: ansible_distribution == "Ubuntu"
+
+  - name: httpd install
+    yum:
+      name: httpd
+      state: present
+    when: ansible_distribution == "Amazon"
+
+  - name: starting httpd 
+    service:
+      name: httpd
+      state: started
+    when: ansible_distribution == "Amazon"
+
+  - name: enabling httpd
+    service:
+      name: httpd
+      enabled: yes
+    when: ansible_distribution == "Amazon"
+
+  - name: git install
+    yum:
+      name: git
+      state: present
+    when: ansible_distribution == "Amazon"
+
+  - name:  cleaning
+    file:
+      path: /var/www/html/index.nginx-debian.html
+      state: absent
+    when: ansible_distribution == "Ubuntu"
+
+  - name: deploying
+    git:
+      repo: https://github.com/ravi2krishna/ecomm.git
+      dest: /var/www/html/
